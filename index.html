@@ -22,7 +22,13 @@
       text-align: center;
       font-size: 24px;
       font-family: monospace;
-      color: #fff;
+    }
+    
+    /* Draggable numbers */
+    .draggable {
+      position: absolute;
+      cursor: grab;
+      color: #ff0000;
     }
   </style>
 </head>
@@ -50,18 +56,46 @@
         const y = Math.sin(spiralAngle + i) * radius;
         const number = numbers[i % numbers.length];
         
-        spiralHtml += `<span style="position: absolute; top: ${y}px; left: ${x}px;">${number}</span>`;
+        spiralHtml += `<span class="draggable" style="top: ${y}px; left: ${x}px;">${number}</span>`;
       }
       
       spiralElement.innerHTML = spiralHtml;
+      
+      // Add event listeners for draggable numbers
+      const draggableElements = document.querySelectorAll(".draggable");
+      draggableElements.forEach((element) => {
+        element.addEventListener("touchstart", handleTouchStart);
+        element.addEventListener("touchmove", handleTouchMove);
+        element.addEventListener("touchend", handleTouchEnd);
+      });
+      
       requestAnimationFrame(animate);
     }
     
-    // Interaction event
-    spiralElement.addEventListener("touchstart", (e) => {
-      spiralSpeed += 10;
-      spiralElement.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    });
+    // Draggable number variables
+    let activeElement = null;
+    let offsetX = 0;
+    let offsetY = 0;
+    
+    // Handle touch start
+    function handleTouchStart(e) {
+      activeElement = this;
+      offsetX = e.touches[0].clientX - activeElement.offsetLeft;
+      offsetY = e.touches[0].clientY - activeElement.offsetTop;
+    }
+    
+    // Handle touch move
+    function handleTouchMove(e) {
+      if (activeElement) {
+        activeElement.style.top = `${e.touches[0].clientY - offsetY}px`;
+        activeElement.style.left = `${e.touches[0].clientX - offsetX}px`;
+      }
+    }
+    
+    // Handle touch end
+    function handleTouchEnd() {
+      activeElement = null;
+    }
     
     // Start animation
     animate();
