@@ -3,68 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HI IMGUNNAKEEPITABUCKWITU</title>
+  <title>ASCII Spiral</title>
   <style>
-    /* Import demonic font */
-    @font-face {
-      font-family: 'Creepster';
-      src: url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
-    }
-    
     /* Global styles */
     body {
-      font-family: 'Creepster', cursive;
       margin: 0;
       padding: 0;
-      background-color: #333;
-      background-image: linear-gradient(#444, #333);
-      color: #ff9900;
+      background-color: #000;
+      overflow: hidden;
     }
     
-    /* Responsive design */
-    h1, p {
+    /* Spiral container */
+    #spiral {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
-      margin: 20px;
-      padding: 10px;
-      text-shadow: 2px 2px #000;
-    }
-    
-    /* Media queries for mobile optimization */
-    @media only screen and (max-width: 768px) {
-      h1 {
-        font-size: 24px;
-      }
-      p {
-        font-size: 18px;
-      }
-    }
-    
-    /* Demonic effects */
-    h1 {
-      font-size: 48px;
-      font-weight: bold;
-      border-bottom: 2px solid #ff9900;
-    }
-    
-    p {
       font-size: 24px;
-      font-style: italic;
+      font-family: monospace;
+      color: #fff;
     }
   </style>
 </head>
-<body onload="playSound()">
-  <h1>HI IMGUNNAKEEPITABUCKWITU</h1>
-  <p>jabooty deez urgay</p>
-  
-  <audio id="screamSound" loop>
-    <source src="https://www.noiseforfun.com/sounds/scream.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+<body>
+  <div id="spiral"></div>
   
   <script>
-    function playSound() {
-      document.getElementById("screamSound").play();
+    // Spiral settings
+    const spiralElement = document.getElementById("spiral");
+    const spiralSize = 200;
+    const spiralSpeed = 50;
+    let spiralAngle = 0;
+    
+    // ASCII numbers
+    const numbers = "0123456789";
+    
+    // Animation function
+    function animate() {
+      spiralAngle += 0.1;
+      let spiralHtml = "";
+      
+      for (let i = 0; i < spiralSize; i++) {
+        const radius = i * 2;
+        const x = Math.cos(spiralAngle + i) * radius;
+        const y = Math.sin(spiralAngle + i) * radius;
+        const number = numbers[i % numbers.length];
+        
+        spiralHtml += `<span style="position: absolute; top: ${y}px; left: ${x}px;">${number}</span>`;
+      }
+      
+      spiralElement.innerHTML = spiralHtml;
+      requestAnimationFrame(animate);
     }
+    
+    // Interaction event
+    spiralElement.addEventListener("touchstart", (e) => {
+      spiralSpeed += 10;
+      spiralElement.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    });
+    
+    // Start animation
+    animate();
   </script>
 </body>
 </html>
